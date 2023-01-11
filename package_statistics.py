@@ -13,6 +13,11 @@ import urllib.error
 import gzip
 import shutil
 
+def read_args(args):
+    """Process user arguments from command line - Exit if unexpected number"""
+    assert (len(args) == 2), "Expect architecture (amd64, arm64, etc.) as only argument"
+    return args[1]
+
 def download_cf(architecture):
     """Takes architecture (string) and downloads associated contents file from the debian mirror"""
 
@@ -60,7 +65,14 @@ def cleanup_cf(architecture):
 
 if __name__ == "__main__":
     print("Initialising")
-    download_cf(sys.argv[1])
-    decompress_cf(sys.argv[1])
-    cleanup_cf(sys.argv[1])
+
+    # Process command line arguments
+    ARCH = read_args(sys.argv)
+
+    # Aquire contents file in working directory
+    download_cf(ARCH)
+    decompress_cf(ARCH)
+
+    # Exit process
+    cleanup_cf(ARCH)
     print("Complete")
