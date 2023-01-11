@@ -29,7 +29,7 @@ Could use the following process with top bullet as a testable unit
 - Aquire data
   - Connect to mirror						 
   - Download compressed Contents file                    
-  - Decompress file  						
+  - Decompress file
 - Process data
   - Read file
   - Parse file into list (see proposal)
@@ -66,7 +66,7 @@ Compute rank of file_count entries numerically, use to sort both file_count and 
 ## Assumptions (Considering context of the role applied to):
 - Tool to be used on an Ubuntu machine (Use only python standard libarary to avoid adding dependancies, no pip)
   - Debian Python Policy 0.12.0.0 documentation -> "Packages in Debian should use Python 3"
-  - The following included modules should be sufficent: sys, os, urllib, tarfile 
+  - The following included modules should be sufficent for the bulk: sys, os, urllib, gzip
 - The delivered tool need not be installed (Run with ./)
 
 ## Design considerations:
