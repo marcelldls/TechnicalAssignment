@@ -4,6 +4,9 @@
 
 import unittest
 import os
+import sys
+#from parentdirectory import package_statistics
+sys.path.append('../')
 from package_statistics import read_args, download_cf, decompress_cf, cleanup_cf
 
 class TestReadArgs(unittest.TestCase):
