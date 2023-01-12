@@ -22,6 +22,7 @@ def download_cf(architecture):
     """Takes architecture (string) and downloads associated contents file from the debian mirror"""
 
     debian_mirror = 'http://ftp.uk.debian.org/debian/dists/stable/main/'
+    #debian_mirror = 'http://archive.ubuntu.com/ubuntu/dists/trusty/'   # mirror with alt format
     contents_file = 'Contents-' + architecture + '.gz'
     remote_url = debian_mirror + contents_file
 
@@ -33,7 +34,7 @@ def download_cf(architecture):
         raise Exception('Unable to connect to Debian mirror') from None   # PEP 409
 
     try:   # Download file and save locally
-        print('Retriving file: ' + contents_file)
+        print('Retrieving file: ' + contents_file)
         urllib.request.urlretrieve(remote_url, contents_file)
         print('Contents file sucessfully retrieved!')
     except:
@@ -63,16 +64,74 @@ def cleanup_cf(architecture):
     os.remove(contents_file)
     print('Clean up complete')
 
+class CfStatistics:
+    """Contains methods to process an architectures contents file"""
+
+    def __init__(self, architecture):
+        self.package_dict = {}     # Dictionary has O(1) search vs list O(n)
+        self.package_names = []
+        self.file_count = []
+        self.architecture = architecture
+        self.__tally()
+        self.__sort()
+
+    def __tally(self):
+        # load file
+        file_name = 'Contents-' + self.architecture
+        print("Parsing contents file")
+        with open(file_name, 'rt', errors='ignore') as file:
+
+            # Search For header
+            start_line = 0
+            for i in range(100):
+                line = file.readline()
+                if "".join(line.split()) == "FILELOCATION":
+                    start_line = i
+            print("Starting scan from line" + ' ' + str(start_line))
+
+            # Scan each line
+            for num, line in enumerate(file):
+
+                # Skip if header
+                if num <= start_line:
+                    continue
+
+                # Extract name as string
+                name_idx = line.rfind('/')      # Find index where name starts
+                line_name = line[name_idx+1:-3] # Drop '\n' at end
+
+                # Populate dictionary with unique names and occurances
+                if line_name not in self.package_dict:
+                    self.package_dict[line_name] = 1
+                else:
+                    self.package_dict[line_name] += 1
+
+    def __sort(self):
+        sorted_dict = sorted(self.package_dict.items(), key=lambda item: item[1]) # list of tuples
+        self.file_count = [sorted_dict[-(i+1)][1] for i in range(10)]     # Extract top 10 values
+        self.package_names = [sorted_dict[-(i+1)][0] for i in range(10)]  # Extract top 10 keys
+
+    def print_top10(self):     # Assumes more than 10 unique packages exist in repo
+        """Prints a numerated list of the top 10 ranked packages for file count"""
+        print('The top 10 packages with the highest file counts are:')
+        for i in range(len(self.package_names)):
+            print(str(i+1), end='. ')
+            print(self.package_names[i], end='  ')
+            print(self.file_count[i])
+
 if __name__ == "__main__":
     print("Initialising")
 
     # Process command line arguments
-    ARCH = read_args(sys.argv)
+    arch = read_args(sys.argv)
 
     # Aquire contents file in working directory
-    download_cf(ARCH)
-    decompress_cf(ARCH)
+    download_cf(arch)
+    decompress_cf(arch)
 
-    # Exit process
-    cleanup_cf(ARCH)
-    print("Complete")
+    # Extract statistics
+    archStats = CfStatistics(arch)
+
+    # End process
+    cleanup_cf(arch)
+    archStats.print_top10()
