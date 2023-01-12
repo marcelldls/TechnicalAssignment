@@ -57,12 +57,10 @@ Conforming to the given table spec - My interpretation is:
 (for each row): {File name relative to root directory} >> {White space length>0} >> {qualified package name [[$AREA/]$SECTION/]$NAME} 
 ```
 
-Some contents files start listing packages directly (http://ftp.uk.debian.org/debian/dists/stable/main/Contents-amd64.gz) 
-Other contents files start with a blurb and a header (http://archive.ubuntu.com/ubuntu/dists/trusty/Contents-amd64.gz) 
-To accomodate this - search first 100 lines for the FILE/LOCATION header. If exists, start from next line. If missing, start from line 1.
+Some contents files start listing packages directly (http://ftp.uk.debian.org/debian/dists/stable/main/Contents-amd64.gz). Other contents files start with a blurb and a header (http://archive.ubuntu.com/ubuntu/dists/trusty/Contents-amd64.gz). To accomodate this - search first 100 lines for the FILE/LOCATION header. If exists, start from next line. If missing, start from line 0.
 
 Considering the spec for tallying:
-- package names: are unique entries ("A repository must not include different packages (different content) with the same package name, version, and architecture" >
+- package names: are unique entries ("A repository must not include different packages (different content) with the same package name, version, and architecture")
 - file count: Each file has new line therefore sum name occurances to determine number of files
 
 Pseudo code:
@@ -72,7 +70,7 @@ Initiate empty dictionary
 For each line in text file:
   Get package name: Read from right to left, drop everything from (including) first seen "/" 
   If: name not in dictionary (significantly faster search than list), add key with corresponding value "1"
-  Else: Find corresponding key and add 1 to corresponding value
+  Else: Find key in dictionary and add 1 to corresponding value
 ```
 
 ## Assumptions (Considering context of the role applied to):
@@ -98,7 +96,7 @@ The following failure modes are considered:
   - Return exception, unable to connect to mirror
 
 The following edge cases are considered and ignored due to low likelyhood:
-- Multiple top 10 packages with the same number of associated files - will not be actively subranked. The first 10 are only ever returned
-- Assume that the repo always has more than 10 unique packages
+- Multiple top 10 packages with the same number of associated files - will not be actively subranked. The highest 10 packages are only ever returned
+- Assume that the repo always has atleast 10 unique packages
 
 The MIT license is chosen -> "short and simple permissive license"
