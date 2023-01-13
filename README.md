@@ -61,11 +61,11 @@ Some contents files start listing packages directly (http://ftp.uk.debian.org/de
 
 Considering the spec for tallying:
 - package names: are unique entries ("A repository must not include different packages (different content) with the same package name, version, and architecture")
-- file count: Each file has new line therefore sum name occurances to determine number of files
+- file count: Each file has a new line therefore sum name occurances to determine number of files
 
 Pseudo code:
 ```
-Initiate empty dictionary
+Initialise empty dictionary
 
 For each line in text file:
   Get package name: Read from right to left, drop everything from (including) first seen "/" 
@@ -91,12 +91,12 @@ The following is tested:
 The following failure modes are considered:
 - Call error
   - Expected arguments is only one. Additional or no aruguments to raise an exception and inform user of incorrect usage
-  - Only limited architectures are supported. However hardcoding this to the tool is limiting so the argument is not filtered. If no contents file found: "No Contents file associated with <architecture>". Feels like not enough architectures exist to justify spell correct/recommender so this functionality will keep it simple rather.  
+  - Only limited architectures are supported. However hardcoding this to the tool is limiting so the argument is not filtered. If no contents file found: "No Contents file associated with \<architecture\>". Feels like not enough architectures exist to justify spell-correct/recommender so this functionality will keep it simple rather.  
 - Connection error
   - Return exception, unable to connect to mirror
 
 The following edge cases are considered and ignored due to low likelyhood:
-- Multiple top 10 packages with the same number of associated files - will not be actively subranked. The highest 10 packages are only ever returned
+- Multiple top 10 packages with the same number of associated files - will not be actively subranked. The highest 10 packages are only ever returned (ie if pos 10, 11 are equal only pos 10 will be shown)
 - Assume that the repo always has atleast 10 unique packages
 
 The MIT license is chosen -> "short and simple permissive license"

@@ -59,7 +59,7 @@ class TestDownloadCf(unittest.TestCase):
         """Test downloading of contents file"""
         download_cf(self.test_architecture)
         self.assertTrue(os.path.exists(self.test_file))
-        if os.path.exists(self.test_file):
+        if os.path.exists(self.test_file):   # Clean up
             os.remove(self.test_file)
 
 class TestDecompressCf(unittest.TestCase):
@@ -69,7 +69,7 @@ class TestDecompressCf(unittest.TestCase):
     test_architecture = 'amd64'
     decompressed_file = 'Contents-' + test_architecture
 
-    def setUp(self):
+    def setUp(self): # Remove any preexisting contents file
         if os.path.exists(self.decompressed_file):
             os.remove(self.decompressed_file)
 
@@ -85,7 +85,7 @@ class TestDecompressCf(unittest.TestCase):
 
         decompress_cf(self.test_architecture)
         self.assertTrue(os.path.exists(self.decompressed_file))
-        if os.path.exists(self.decompressed_file):
+        if os.path.exists(self.decompressed_file):  # Clean up
             os.remove(self.decompressed_file)
 
 class TestCleanup(unittest.TestCase):
@@ -108,7 +108,7 @@ class TestCf1Statistics(unittest.TestCase):
 
     def setUp(self):
         self.expect_count = [17, 14, 12, 10, 8, 7, 6, 5, 4, 3]  # Manually counted
-        self.expect_names = ['package_'+str(x+1) for x in range(10)]
+        self.expect_names = ['package_'+str(x+1) for x in range(10)] # Expected package rank
         self.test1_stats = CfStatistics('test1')
 
     def test1_count(self):
@@ -126,7 +126,7 @@ class TestCf2Statistics(unittest.TestCase):
 
     def setUp(self):
         self.expect_count = [17, 14, 12, 10, 8, 7, 6, 5, 4, 3]  # Manually counted
-        self.expect_names = ['package_'+str(x+1) for x in range(10)]
+        self.expect_names = ['package_'+str(x+1) for x in range(10)] # Expected package rank
         self.test2_stats = CfStatistics('test2')
 
     def test2_count(self):
