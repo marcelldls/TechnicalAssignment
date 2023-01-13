@@ -89,16 +89,20 @@ class CfStatistics:
                     start_line = i
             print("Starting scan from line" + ' ' + str(start_line))
 
+        print("Parsing contents file")
+        with open(file_name, 'rt', errors='ignore') as file:
+
             # Scan each line
             for num, line in enumerate(file):
 
                 # Skip if header
-                if num <= start_line:
+                if num <= start_line-1:
                     continue
 
                 # Extract name as string
+                line = line.strip('\n')
                 name_idx = line.rfind('/')      # Find index where name starts
-                line_name = line[name_idx+1:-3] # Drop '\n' at end
+                line_name = line[name_idx+1:]
 
                 # Populate dictionary with unique names and occurances
                 if line_name not in self.package_dict:
@@ -135,3 +139,4 @@ if __name__ == "__main__":
     # End process
     cleanup_cf(arch)
     archStats.print_top10()
+    

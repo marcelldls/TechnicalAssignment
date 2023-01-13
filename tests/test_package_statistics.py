@@ -4,10 +4,11 @@
 
 import unittest
 import os
+import gzip
+import shutil
 import sys
-#from parentdirectory import package_statistics
 sys.path.append('../')
-from package_statistics import read_args, download_cf, decompress_cf, cleanup_cf
+from package_statistics import read_args, download_cf, decompress_cf, cleanup_cf, CfStatistics
 
 class TestReadArgs(unittest.TestCase):
     """
@@ -45,12 +46,12 @@ class TestReadArgs(unittest.TestCase):
 class TestDownloadCf(unittest.TestCase):
     """
     Test downloading of contents file
-    Only using amd64 otherwise test duration is long (each architecture ~10mb files)
+    Only using amd64 otherwise test duration is long
     """
     test_architecture = 'amd64'
     test_file = 'Contents-' + test_architecture + '.gz'
 
-    def setUp(self):
+    def setUp(self): # Remove any preexisting contents file
         if os.path.exists(self.test_file):
             os.remove(self.test_file)
 
@@ -75,7 +76,13 @@ class TestDecompressCf(unittest.TestCase):
     def test_decompress(self):
         """Test decompression of contents file"""
         open(self.decompressed_file, 'w').close()    # Create empty file
-        os.system('gzip ' + self.decompressed_file)
+
+        # Compress file
+        with open(self.decompressed_file, 'rb') as f_in:
+            with gzip.open(self.decompressed_file+'.gz', 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        os.remove(self.decompressed_file) # Clean up by deleting uncompressed file
+
         decompress_cf(self.test_architecture)
         self.assertTrue(os.path.exists(self.decompressed_file))
         if os.path.exists(self.decompressed_file):
@@ -93,6 +100,42 @@ class TestCleanup(unittest.TestCase):
         open(self.target_file, 'w').close()    # Create empty file
         cleanup_cf(self.test_architecture)
         self.assertFalse(os.path.exists(self.target_file))
+
+class TestCf1Statistics(unittest.TestCase):
+    """
+    Test parsing of the contents file using test1 contents file format
+    """
+
+    def setUp(self):
+        self.expect_count = [17, 14, 12, 10, 8, 7, 6, 5, 4, 3]  # Manually counted
+        self.expect_names = ['package_'+str(x+1) for x in range(10)]
+        self.test1_stats = CfStatistics('test1')
+
+    def test1_count(self):
+        """Test if file count is correct for the test1 format example"""
+        self.assertTrue(self.test1_stats.file_count == self.expect_count)
+
+    def test1_rank(self):
+        """Test if rank is correct for the test1 format example"""
+        self.assertTrue(self.test1_stats.package_names == self.expect_names)
+
+class TestCf2Statistics(unittest.TestCase):
+    """
+    Test parsing of the contents file using test2 contents file format
+    """
+
+    def setUp(self):
+        self.expect_count = [17, 14, 12, 10, 8, 7, 6, 5, 4, 3]  # Manually counted
+        self.expect_names = ['package_'+str(x+1) for x in range(10)]
+        self.test2_stats = CfStatistics('test2')
+
+    def test2_count(self):
+        """Test if file count is correct for the test2 format example"""
+        self.assertTrue(self.test2_stats.file_count == self.expect_count)
+
+    def test2_rank(self):
+        """Test if rank is correct for the test2 format example"""
+        self.assertTrue(self.test2_stats.package_names == self.expect_names)
 
 if __name__ == '__main__':
     unittest.main()
