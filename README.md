@@ -1,4 +1,4 @@
-# Technical assignment: Python Software Engineer - Ubuntu Hardware Certification Team
+# Technical assignment
 
 A python command line tool that takes architecture (amd64, arm64, etc.) as an argument and outputs the statistics of the top 10 packages (from Debian mirror: http://ftp.uk.debian.org/debian/dists/stable/main/) that have the most files associated with them.
 
@@ -99,4 +99,3 @@ The following edge cases are considered and ignored due to low likelyhood:
 - Multiple top 10 packages with the same number of associated files - will not be actively subranked. The highest 10 packages are only ever returned (ie if pos 10, 11 are equal only pos 10 will be shown)
 - Assume that the repo always has atleast 10 unique packages
 
-The MIT license is chosen -> "short and simple permissive license"
