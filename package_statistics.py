@@ -14,10 +14,9 @@ import gzip
 import shutil
 
 
-def download_cf(architecture):
+def download_cf(architecture, debian_mirror):
     """Takes architecture (string) and downloads associated contents file from the debian mirror"""
 
-    debian_mirror = 'http://ftp.uk.debian.org/debian/dists/stable/main/'
     contents_file = 'Contents-' + architecture + '.gz'
     remote_url = debian_mirror + contents_file
 
@@ -119,17 +118,25 @@ class CfStatistics:
 
 if __name__ == "__main__":
 
+    DEB_MIRROR = "http://ftp.uk.debian.org/debian/dists/stable/main/"
+
     # Process arguments
     parser = argparse.ArgumentParser(prog='package_statistics.py')
     parser.add_argument(
         "architecture",
         help="Desired architecture (amd64, arm64, etc.)",
         )
+    parser.add_argument(
+        "--debian_mirror",
+        metavar='',
+        default=DEB_MIRROR,
+        help=f"Desired Debian Mirror. Default: {DEB_MIRROR}",
+        )
     args = parser.parse_args()
     print("Process package statistics for:", args.architecture)
 
     # Aquire contents file in working directory
-    download_cf(args.architecture)
+    download_cf(args.architecture, args.debian_mirror)
     decompress_cf(args.architecture)
 
     # Process data
