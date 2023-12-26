@@ -6,17 +6,13 @@ the statistics of the top 10 packages (from Debian mirror:
 http://ftp.uk.debian.org/debian/dists/stable/main/) that have the most files associated with them.
 """
 
-import sys
+import argparse
 import os
 import urllib.request
 import urllib.error
 import gzip
 import shutil
 
-def read_args(args):
-    """Process user arguments from command line - Exit if unexpected number"""
-    assert (len(args) == 2), "Expect architecture (amd64, arm64, etc.) as only argument"
-    return args[1]
 
 def download_cf(architecture):
     """Takes architecture (string) and downloads associated contents file from the debian mirror"""
@@ -122,18 +118,23 @@ class CfStatistics:
             print(self.file_count[i])
 
 if __name__ == "__main__":
-    print("Initialising")
 
-    # Process desired architecture
-    arch = read_args(sys.argv)
+    # Process arguments
+    parser = argparse.ArgumentParser(prog='package_statistics.py')
+    parser.add_argument(
+        "architecture",
+        help="Desired architecture (amd64, arm64, etc.)",
+        )
+    args = parser.parse_args()
+    print("Process package statistics for:", args.architecture)
 
     # Aquire contents file in working directory
-    download_cf(arch)
-    decompress_cf(arch)
+    download_cf(args.architecture)
+    decompress_cf(args.architecture)
 
     # Process data
-    archStats = CfStatistics(arch)
-    cleanup_cf(arch)
+    archStats = CfStatistics(args.architecture)
+    cleanup_cf(args.architecture)
 
     # Return results
     archStats.print_top10()
