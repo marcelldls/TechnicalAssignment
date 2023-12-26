@@ -12,12 +12,14 @@ import urllib.request
 import urllib.error
 import gzip
 import shutil
+import tempfile
 
 
-def download_cf(architecture, debian_mirror):
+def download_cf(architecture, debian_mirror, dir):
     """Takes architecture (string) and downloads associated contents file from the debian mirror"""
 
     contents_file = 'Contents-' + architecture + '.gz'
+    path = os.path.join(dir, contents_file)
     remote_url = debian_mirror + contents_file
 
     try:  # Test connection
@@ -29,51 +31,47 @@ def download_cf(architecture, debian_mirror):
 
     try:   # Download file and save locally
         print('Retrieving file: ' + contents_file)
-        urllib.request.urlretrieve(remote_url, contents_file)
+        urllib.request.urlretrieve(remote_url, path)
         print('Contents file sucessfully retrieved!')
     except:
         raise Exception('Failed to locate contents file for '+ architecture) from None
 
-def decompress_cf(architecture):
+def decompress_cf(architecture, dir):
     """Takes architecture (string) and decompresses associated contents file"""
 
     print('Decompressing contents file')
     contents_file = 'Contents-' + architecture
-    compressed_file = contents_file + '.gz'
+    compressed_file = os.path.join(dir, contents_file + '.gz')
+    decompressed_file = os.path.join(dir, contents_file)
 
     # Decompress file
     with gzip.open(compressed_file, 'rb') as f_in:
-        with open(contents_file, 'wb') as f_out:
+        with open(decompressed_file, 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
 
     # Clean up by deleting downloaded compressed file
     os.remove(compressed_file)
     print('Contents file decompressed')
 
-def cleanup_cf(architecture):
-    """Takes architecture (string) and deletes associated contents file"""
-
-    print('Cleaning up working directory')
-    contents_file = 'Contents-' + architecture
-    os.remove(contents_file)
-    print('Clean up complete')
 
 class CfStatistics:
     """Contains methods to process an architectures contents file"""
 
-    def __init__(self, architecture):
+    def __init__(self, architecture, dir):
         self.package_dict = {}     # Dictionary has O(1) search vs list O(n)
         self.package_names = []
         self.file_count = []
         self.architecture = architecture
+        self.dir = dir
         self.__tally()
         self.__sort()
 
     def __tally(self):
         # load file
         file_name = 'Contents-' + self.architecture
+        path = os.path.join(self.dir, file_name)
         print("Parsing contents file")
-        with open(file_name, 'rt', errors='ignore') as file:
+        with open(path, 'rt', errors='ignore') as file:
 
             # Search For header
             start_line = 0
@@ -83,7 +81,7 @@ class CfStatistics:
                     start_line = i
             print("Starting scan from line" + ' ' + str(start_line))
 
-        with open(file_name, 'rt', errors='ignore') as file:
+        with open(path, 'rt', errors='ignore') as file:
 
             # Scan each line
             for num, line in enumerate(file):
@@ -135,13 +133,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
     print("Process package statistics for:", args.architecture)
 
-    # Aquire contents file in working directory
-    download_cf(args.architecture, args.debian_mirror)
-    decompress_cf(args.architecture)
+    with tempfile.TemporaryDirectory() as tmpdirname:
 
-    # Process data
-    archStats = CfStatistics(args.architecture)
-    cleanup_cf(args.architecture)
+        # Aquire contents file in working directory
+        download_cf(args.architecture, args.debian_mirror, tmpdirname)
+        decompress_cf(args.architecture, tmpdirname)
 
-    # Return results
-    archStats.print_top10()
+        # Process data
+        archStats = CfStatistics(args.architecture, tmpdirname)
+
+        # Return results
+        archStats.print_top10()
