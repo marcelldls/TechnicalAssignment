@@ -48,7 +48,7 @@ def decompress_cf(architecture: str, dir: str) -> None:
 
 
 class CfStatistics:
-    """Contains methods to process an architectures contents file"""
+    """Process statistics of an architecture contents file"""
 
     def __init__(self, architecture, dir):
         self.package_dict = {}     # Dictionary has O(1) search vs list O(n)
@@ -94,18 +94,18 @@ class CfStatistics:
                 else:
                     self.package_dict[line_name] += 1    # existing key
 
-    def __sort(self):   # Assumes more than 10 unique packages exist in repo
-        sorted_dict = sorted(self.package_dict.items(), key=lambda item: item[1]) # list of tuples
-        self.file_count = [sorted_dict[-(i+1)][1] for i in range(10)]     # Extract top 10 values
-        self.package_names = [sorted_dict[-(i+1)][0] for i in range(10)]  # Extract top 10 keys
+    def __sort(self):
+        sorted_dict = sorted(self.package_dict.items(), key=lambda item: item[1])  # list of tuples
+        self.file_count = [sorted_dict[-(i+1)][1] for i in range(len(sorted_dict))]
+        self.package_names = [sorted_dict[-(i+1)][0] for i in range(len(sorted_dict))]
 
     def print_top10(self):
-        """Prints a numerated list of the top 10 ranked packages for file count"""
         print('The top 10 packages with the highest file counts are:')
-        for i in range(len(self.package_names)):
-            print(str(i+1), end='. ')
-            print(self.package_names[i], end='  ')
-            print(self.file_count[i])
+        for i in range(10):
+            try:
+                print(f"{i+1}. {self.package_names[i]}  {self.file_count[i]}")
+            except IndexError:  # Handle less than 10 unique packages
+                print(f"{i+1}.")
 
 if __name__ == "__main__":
 
