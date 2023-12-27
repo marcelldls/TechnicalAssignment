@@ -125,13 +125,13 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "architecture",
-        help="Desired architecture (amd64, arm64, etc.)",
+        help="desired architecture (amd64, arm64, etc.)",
         )
     parser.add_argument(
         "--debian_mirror",
         metavar='',
         default=DEB_MIRROR,
-        help=f"Desired Debian Mirror. Default: {DEB_MIRROR}",
+        help=f"desired Debian Mirror (Default: {DEB_MIRROR})",
         )
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel, format='%(message)s')
