@@ -45,9 +45,6 @@ def decompress_cf(architecture, dir):
     with gzip.open(compressed_file, 'rb') as f_in:
         with open(decompressed_file, 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
-
-    # Clean up by deleting downloaded compressed file
-    os.remove(compressed_file)
     logging.info('Contents file decompressed')
 
 
