@@ -22,19 +22,12 @@ def download_cf(architecture, debian_mirror, dir):
     path = os.path.join(dir, contents_file)
     remote_url = debian_mirror + contents_file
 
-    try:  # Test connection
-        print('Attempt to connect to Debian mirror...')
-        urllib.request.urlopen(debian_mirror, timeout=1.0)
-        print('Connection to Debian mirror successful!')
-    except:
-        raise Exception('Unable to connect to Debian mirror') from None   # PEP 409
-
     try:   # Download file and save locally
-        print('Retrieving file: ' + contents_file)
         urllib.request.urlretrieve(remote_url, path)
-        print('Contents file sucessfully retrieved!')
-    except:
-        raise Exception('Failed to locate contents file for '+ architecture) from None
+    except urllib.error.HTTPError as e:
+        raise Exception(f"{e}. Is '{architecture}' a valid architecture?") from e
+    except OSError as e:
+        raise Exception(f"{e}: Is your internet connection active?") from e
 
 def decompress_cf(architecture, dir):
     """Takes architecture (string) and decompresses associated contents file"""
