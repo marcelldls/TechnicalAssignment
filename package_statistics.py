@@ -7,6 +7,7 @@ http://ftp.uk.debian.org/debian/dists/stable/main/) that have the most files ass
 """
 
 import argparse
+import logging
 import os
 import urllib.request
 import urllib.error
@@ -23,7 +24,9 @@ def download_cf(architecture, debian_mirror, dir):
     remote_url = debian_mirror + contents_file
 
     try:   # Download file and save locally
+        logging.info('Retrieving file: ' + contents_file)
         urllib.request.urlretrieve(remote_url, path)
+        logging.info('Contents file sucessfully retrieved!')
     except urllib.error.HTTPError as e:
         raise Exception(f"{e}. Is '{architecture}' a valid architecture?") from e
     except OSError as e:
@@ -32,19 +35,20 @@ def download_cf(architecture, debian_mirror, dir):
 def decompress_cf(architecture, dir):
     """Takes architecture (string) and decompresses associated contents file"""
 
-    print('Decompressing contents file')
+
     contents_file = 'Contents-' + architecture
     compressed_file = os.path.join(dir, contents_file + '.gz')
     decompressed_file = os.path.join(dir, contents_file)
 
     # Decompress file
+    logging.info('Decompressing contents file')
     with gzip.open(compressed_file, 'rb') as f_in:
         with open(decompressed_file, 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
 
     # Clean up by deleting downloaded compressed file
     os.remove(compressed_file)
-    print('Contents file decompressed')
+    logging.info('Contents file decompressed')
 
 
 class CfStatistics:
@@ -63,7 +67,7 @@ class CfStatistics:
         # load file
         file_name = 'Contents-' + self.architecture
         path = os.path.join(self.dir, file_name)
-        print("Parsing contents file")
+        logging.info("Parsing contents file")
         with open(path, 'rt', errors='ignore') as file:
 
             # Search For header
@@ -72,7 +76,7 @@ class CfStatistics:
                 line = file.readline()
                 if "".join(line.split()) == "FILELOCATION":
                     start_line = i
-            print("Starting scan from line" + ' ' + str(start_line))
+            logging.info("Starting scan from line" + ' ' + str(start_line))
 
         with open(path, 'rt', errors='ignore') as file:
 
@@ -114,6 +118,12 @@ if __name__ == "__main__":
     # Process arguments
     parser = argparse.ArgumentParser(prog='package_statistics.py')
     parser.add_argument(
+        '-v', '--verbose',
+        help="verbose output",
+        action="store_const", dest="loglevel", const=logging.INFO,
+        default=logging.WARNING,
+    )
+    parser.add_argument(
         "architecture",
         help="Desired architecture (amd64, arm64, etc.)",
         )
@@ -124,7 +134,8 @@ if __name__ == "__main__":
         help=f"Desired Debian Mirror. Default: {DEB_MIRROR}",
         )
     args = parser.parse_args()
-    print("Process package statistics for:", args.architecture)
+    logging.basicConfig(level=args.loglevel, format='%(message)s')
+    print(f"Processing package statistics for {args.architecture}...")
 
     with tempfile.TemporaryDirectory() as tmpdirname:
 
