@@ -16,11 +16,11 @@ import shutil
 import tempfile
 
 
-def download_cf(architecture, debian_mirror, dir):
-    """Takes architecture (string) and downloads associated contents file from the debian mirror"""
+def download_cf(architecture: str, debian_mirror:str, working_dir: str) -> None:
+    """Download architecture contents file from the debian mirror"""
 
     contents_file = 'Contents-' + architecture + '.gz'
-    path = os.path.join(dir, contents_file)
+    path = os.path.join(working_dir, contents_file)
     remote_url = debian_mirror + contents_file
 
     try:   # Download file and save locally
@@ -32,9 +32,8 @@ def download_cf(architecture, debian_mirror, dir):
     except OSError as e:
         raise Exception(f"{e}: Is your internet connection active?") from e
 
-def decompress_cf(architecture, dir):
-    """Takes architecture (string) and decompresses associated contents file"""
-
+def decompress_cf(architecture: str, dir: str) -> None:
+    """Decompresses an architecture contents file"""
 
     contents_file = 'Contents-' + architecture
     compressed_file = os.path.join(dir, contents_file + '.gz')
