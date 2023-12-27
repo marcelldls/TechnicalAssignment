@@ -121,7 +121,8 @@ if __name__ == "__main__":
         default=logging.WARNING,
     )
     parser.add_argument(
-        "architecture",
+        "arch",
+        metavar="architecture",
         help="desired architecture (amd64, arm64, etc.)",
         )
     parser.add_argument(
@@ -132,16 +133,16 @@ if __name__ == "__main__":
         )
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel, format='%(message)s')
-    print(f"Processing package statistics for {args.architecture}...")
+    print(f"Processing package statistics for {args.arch}...")
 
     with tempfile.TemporaryDirectory() as tmpdirname:
 
         # Aquire contents file in working directory
-        download_cf(args.architecture, args.debian_mirror, tmpdirname)
-        decompress_cf(args.architecture, tmpdirname)
+        download_cf(args.arch, args.debian_mirror, tmpdirname)
+        decompress_cf(args.arch, tmpdirname)
 
         # Process data
-        archStats = CfStatistics(args.architecture, tmpdirname)
+        archStats = CfStatistics(args.arch, tmpdirname)
 
         # Return results
         archStats.print_top10()
