@@ -22,6 +22,18 @@ Returns:
 <package name 10>         <number of files>
 ```
 
+## Development
+
+Installation:
+```
+pip install -e .[dev]
+```
+
+Running tests:
+```
+tox
+```
+
 ## Assignment requests:
 - Work in a local Git repository
 - Submit a tar.gz of the repo
