@@ -107,7 +107,8 @@ class CfStatistics:
             except IndexError:  # Handle less than 10 unique packages
                 print(f"{i+1}.")
 
-if __name__ == "__main__":
+
+def main():
 
     DEB_MIRROR = "http://ftp.uk.debian.org/debian/dists/stable/main/"
 
@@ -145,3 +146,7 @@ if __name__ == "__main__":
 
         # Return results
         archStats.print_top10()
+
+
+if __name__ == "__main__":
+    main()

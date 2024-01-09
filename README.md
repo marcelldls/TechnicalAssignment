@@ -4,9 +4,14 @@ A python command line tool that takes architecture (amd64, arm64, etc.) as an ar
 
 ## Example of usage:
 
+Installation:
+```
+pip install .
+```
+
 Running:
 ```
-./package_statistics.py amd64
+package_statistics amd64
 ```
 
 Returns:
