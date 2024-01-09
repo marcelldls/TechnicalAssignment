@@ -6,6 +6,7 @@ setup(
     python_requires='>=3.8',
     extras_require={
         'dev': [
+            'black',
             'tox',
         ],
     },
