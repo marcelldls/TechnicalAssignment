@@ -3,6 +3,20 @@ name: Python package
 on: [push, pull_request]
 
 jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4  # version of the action
+        with:
+          python-version: '3.11'
+      - name: Install package
+        run: pip install .[dev]
+      - name: Linting
+        run: tox -e lint
+
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -16,8 +30,6 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Install package
         run: pip install .[dev]
-      - name: Linting
-        run: tox -e lint
       - name: Execute test runner
         run: tox -e py
 
