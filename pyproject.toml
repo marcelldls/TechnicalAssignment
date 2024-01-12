@@ -40,7 +40,7 @@ legacy_tox_ini = """
 
     [testenv]  # settings common to all environments 
     commands = 
-        python -c "print('Test placeholder')"
+        python -m unittest discover tests/ "test_*.py"
 
     [testenv:lint]
         allowlist_externals = ruff
