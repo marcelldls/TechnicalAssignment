@@ -74,7 +74,7 @@ class CfStatistics:
                 line = file.readline()
                 if "".join(line.split()) == "FILELOCATION":
                     start_line = i
-            logging.info("Starting scan from line" + " " + str(start_line))
+            logging.info(f"Starting scan from line {start_line}")
 
         with open(path, "rt", errors="ignore") as file:
             # Scan each line
@@ -119,7 +119,7 @@ def main():
 
     # Process arguments
     parser = argparse.ArgumentParser(
-        prog="package_statistics.py", description=__doc__
+        prog="package_statistics", description=__doc__
     )
     parser.add_argument(
         "-v",
