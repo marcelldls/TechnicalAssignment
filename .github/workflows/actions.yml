@@ -3,7 +3,7 @@ name: Python package
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,6 +16,8 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Install package
         run: pip install .[dev]
+      - name: Linting
+        run: tox -e lint
       - name: Execute test runner
-        # Run tox using the version of Python in `PATH`
         run: tox -e py
+
