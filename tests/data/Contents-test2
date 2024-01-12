@@ -1,0 +1,87 @@
+This file maps each file available in the Ubuntu
+system to the package from which it originates.  It includes packages
+from the DIST distribution for the ARCH architecture.
+
+You can use this list to determine which package contains a specific
+file, or whether or not a specific file is available.  The list is
+updated weekly, each architecture on a different day.
+
+When a file is contained in more than one package, all packages are
+listed.  When a directory is contained in more than one package, only
+the first is listed.
+
+The best way to search quickly for a file is with the Unix `grep'
+utility, as in `grep <regular expression> CONTENTS':
+
+ $ grep nose Contents
+ etc/nosendfile                                          net/sendfile
+ usr/X11R6/bin/noseguy                                   x11/xscreensaver
+ usr/X11R6/man/man1/noseguy.1x.gz                        x11/xscreensaver
+ usr/doc/examples/ucbmpeg/mpeg_encode/nosearch.param     graphics/ucbmpeg
+ usr/lib/cfengine/bin/noseyparker                        admin/cfengine
+
+This list contains files in all packages, even though not all of the
+packages are installed on an actual system at once.  If you want to
+find out which packages on an installed Debian system provide a
+particular file, you can use `dpkg --search <filename>':
+
+ $ dpkg --search /usr/bin/dselect
+ dpkg: /usr/bin/dselect
+
+
+FILE                                                    LOCATION
+bin/file_1                                          otherosfs/package_3
+bin/file_2                                          otherosfs/package_3
+bin/file_3                                          otherosfs/package_3
+bin/file_1                                          otherosfs/package_10
+bin/file_2                                          otherosfs/package_10
+bin/file_3                                          otherosfs/package_10
+bin/file_4                                          otherosfs/package_10
+bin/file_5                                          otherosfs/package_10
+bin/file_6                                          otherosfs/package_10
+bin/file_1                                          otherosfs/package_8
+bin/file_2                                          otherosfs/package_8
+bin/file_3                                          otherosfs/package_8
+bin/file_4                                          otherosfs/package_8
+bin/file_5                                          otherosfs/package_8
+bin/file_6                                          otherosfs/package_8
+bin/file_7                                          otherosfs/package_8
+bin/file_8                                          otherosfs/package_8
+bin/file_1                                          otherosfs/package_4
+bin/file_2                                          otherosfs/package_4
+bin/file_3                                          otherosfs/package_4
+bin/file_4                                          otherosfs/package_4
+bin/file_7                                          otherosfs/package_10
+bin/file_8                                          otherosfs/package_10
+bin/file_9                                          otherosfs/package_10
+bin/file_10                                         otherosfs/package_10
+bin/file_1                                          editors/package_9
+bin/file_2                                          editors/package_9
+bin/file_3                                          editors/package_9
+bin/file_4                                          editors/package_9
+bin/file_5                                          editors/package_9
+bin/file_6                                          editors/package_9
+bin/file_7                                          editors/package_9
+bin/file_8                                          editors/package_9
+bin/file_9                                          editors/package_9
+bin/file_1                                          editors/package_7
+bin/file_2                                          editors/package_7
+bin/file_3                                          editors/package_7
+bin/file_4                                          editors/package_7
+bin/file_5                                          editors/package_7
+bin/file_6                                          editors/package_7
+bin/file_7                                          editors/package_7
+usr/lib/file_1                                      libs/package_5
+usr/lib/file_2                                      libs/package_5
+usr/lib/file_3                                      libs/package_5
+usr/lib/file_4                                      libs/package_5
+usr/lib/file_5                                      libs/package_5
+usr/lib/file_1                                      libs/package_6
+usr/lib/file_2                                      libs/package_6
+usr/lib/file_3                                      libs/package_6
+usr/share/file_1		                            libdevel/package_1
+usr/src/long/file/directory/file_1                  kernel/package_2
+usr/src/long/file/directory/file_2                  kernel/package_2
+usr/lib/file_4                                      libs/package_6
+usr/lib/file_5                                      libs/package_6
+usr/lib/file_6                                      libs/package_6
