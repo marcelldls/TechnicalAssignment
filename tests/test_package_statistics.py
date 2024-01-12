@@ -8,7 +8,6 @@ import unittest
 from package_statistics import (
     CfStatistics,
     decompress_cf,
-    download_cf,
 )
 
 DATA_DIR = "tests/data/"
@@ -18,7 +17,7 @@ class TestDecompressCf(unittest.TestCase):
     Test decompression of contents file
     """
 
-    test_architecture = f"ziptest"
+    test_architecture = "ziptest"
     decompressed_file = f"Contents-{test_architecture}"
     result_path = DATA_DIR+decompressed_file
 
