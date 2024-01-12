@@ -1,4 +1,4 @@
-name: Python package
+name: Code CI
 
 on: [push, pull_request]
 
@@ -12,7 +12,7 @@ jobs:
         uses: actions/setup-python@v4  # version of the action
         with:
           python-version: '3.11'
-      - name: Install package
+      - name: Install module
         run: pip install .[dev]
       - name: Linting
         run: tox -e lint
