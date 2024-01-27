@@ -15,7 +15,7 @@ dev = [
 ]
 
 [project.scripts]
-package_statistics = "package_statistics:main"
+package_statistics = "package_statistics.main:cli"
 
 [tool.setuptools_scm]
 

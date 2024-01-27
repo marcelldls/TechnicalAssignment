@@ -5,7 +5,7 @@
 import os
 import unittest
 
-from package_statistics import (
+from package_statistics.utilities import (
     CfStatistics,
     decompress_cf,
 )
