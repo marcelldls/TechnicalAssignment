@@ -33,8 +33,3 @@ Running tests:
 ```
 tox
 ```
-
-## Assignment requests:
-- Work in a local Git repository
-- Submit a tar.gz of the repo
-- Time spent on the exercise (sum hours in commit messages)
