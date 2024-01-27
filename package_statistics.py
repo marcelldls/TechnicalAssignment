@@ -136,13 +136,13 @@ def main():
     )
     parser.add_argument(
         "--debian_mirror",
-        metavar="",
-        default=DEB_MIRROR,
         help=f"desired Debian Mirror (Default: {DEB_MIRROR})",
+        default=DEB_MIRROR,
     )
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel, format="%(message)s")
-    print(f"Processing package statistics for {args.arch}...")
+
+    print(f"Processing package statistics for {args.arch} from {args.debian_mirror}")
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         # Aquire contents file in working directory

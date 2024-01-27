@@ -22,6 +22,11 @@ Returns:
 <package name 10>         <number of files>
 ```
 
+Using alternative mirrors:
+```
+package_statistics --debian_mirror http://ftp.am.debian.org/debian/dists/bullseye/main/ amd64
+```
+
 ## Development
 
 Installation:
