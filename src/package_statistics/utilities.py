@@ -1,11 +1,9 @@
-import logging
-
-import urllib.error
-import urllib.request
-
 import gzip
+import logging
 import os
 import shutil
+import urllib.error
+import urllib.request
 
 
 def download_cf(
