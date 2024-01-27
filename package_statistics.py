@@ -70,17 +70,16 @@ class CfStatistics:
         with open(path, "rt", errors="ignore") as file:
             # Search For header
             start_line = 0
-            for i in range(100):
-                line = file.readline()
+            for num, line in enumerate(file):
                 if "".join(line.split()) == "FILELOCATION":
-                    start_line = i
+                    start_line = num+1
             logging.info(f"Starting scan from line {start_line}")
 
         with open(path, "rt", errors="ignore") as file:
             # Scan each line
             for num, raw_line in enumerate(file):
                 # Skip line if before or is header
-                if num <= start_line - 1:
+                if num < start_line:
                     continue
 
                 # Extract name as string
