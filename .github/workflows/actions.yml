@@ -16,6 +16,8 @@ jobs:
         run: pip install .[dev]
       - name: Linting
         run: tox -e lint
+      - name: Typing
+        run: tox -e type
 
   test:
     runs-on: ubuntu-latest
