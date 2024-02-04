@@ -51,6 +51,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - run: pip install coverage
       - name: Fetch the coverage report
         uses: actions/download-artifact@v4
         with:
