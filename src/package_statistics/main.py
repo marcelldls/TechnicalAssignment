@@ -13,6 +13,7 @@ from package_statistics.utilities import (
 DEB_MIRROR = "http://ftp.uk.debian.org/debian/dists/stable/main/"
 
 @click.group()
+@click.version_option()
 @click.option('-v', '--verbose', is_flag=True)
 @click.option('-m', '--debian_mirror', 'mirror', default=DEB_MIRROR)
 @click.pass_context
