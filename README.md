@@ -16,10 +16,18 @@ package_statistics list <architecture>
 
 Returns:
 ```
-<package name 1>         <number of files>
-<package name 2>         <number of files>
-......
-<package name 10>         <number of files>
+Processing package statistics for 'amd64' from http://ftp.uk.debian.org/debian/dists/stable/main/
+The top 10 packages with the highest file counts are:
+1.piglit                           53007
+2.esys-particle                    18408
+3.acl2-books                       16907
+4.libboost1.81-dev                 15456
+5.racket                           9599
+6.zoneminder                       8161
+7.horizon-eda                      8130
+8.libtorch-dev                     8089
+9.liboce-modeling-dev              7458
+10.linux-headers-6.1.0-15-amd64    6499
 ```
 
 Using alternative mirrors:
