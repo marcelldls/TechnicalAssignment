@@ -34,4 +34,9 @@ jobs:
         run: pip install .[dev]
       - name: Execute test runner
         run: tox -e py
-
+      - name: Produce the coverage report
+        run: tox -e report
+        if: ${{ matrix.python==3.10 }}
+      - name: Process the coverage report
+        if: ${{ matrix.python==3.10 }}
+        run: coverage report
