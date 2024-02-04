@@ -42,8 +42,8 @@ jobs:
         if: ${{ matrix.python==3.10 }}
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report
-          path: ./.coverage
+          name: coverage-data
+          path: .
 
   coverage:
     needs: test
