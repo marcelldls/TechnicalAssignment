@@ -5,6 +5,7 @@ import click
 
 from package_statistics.utilities import (
     CfStatistics,
+    avail_architectures,
     decompress_cf,
     download_cf,
 )
@@ -53,9 +54,11 @@ def list(ctx, arch):
 
 
 @cli.command()
-def avail():
+@click.pass_context
+def avail(ctx):
     """fetch and show available architectures"""
-    arch_list = ["amd64"]
+    mirror = ctx.parent.obj['mirror']
+    arch_list = avail_architectures(mirror)
     click.echo("Available architectures are:")
     for arch in arch_list:
         click.echo(arch)

@@ -1,6 +1,7 @@
 import gzip
 import logging
 import os
+import re
 import shutil
 import urllib.error
 import urllib.request
@@ -103,3 +104,14 @@ class CfStatistics:
                 print(f"{i+1}. {self.package_names[i]}  {self.file_count[i]}")
             except IndexError:  # Handle less than 10 unique packages
                 print(f"{i+1}.")
+
+
+def avail_architectures(debian_mirror: str) -> list[str]:
+
+    with urllib.request.urlopen(debian_mirror) as response:
+        raw = response.read().decode("utf-8")
+
+    filter = '<*href="binary-(.*)\/"'  # https://regex101.com/r/NqS4yK/1
+    urllist = re.findall(filter, raw)
+
+    return urllist[1:]
