@@ -49,7 +49,7 @@ legacy_tox_ini = """
     depends =
         report: py310
     commands =
-        coverage run -m unittest discover tests/ "test_*.py"
+        coverage run -m --source=package_statistics unittest discover tests/ "test_*.py"
 
     [testenv:lint]
     allowlist_externals = ruff
