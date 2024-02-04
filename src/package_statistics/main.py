@@ -59,7 +59,7 @@ def avail(ctx):
     """fetch and show available architectures"""
     mirror = ctx.parent.obj['mirror']
     arch_list = avail_architectures(mirror)
-    click.echo("Available architectures are:")
+    click.echo(f"Available architectures at {mirror} are:")
     for arch in arch_list:
         click.echo(arch)
 
