@@ -5,6 +5,7 @@
 import os
 import unittest
 
+from package_statistics.main import cli
 from package_statistics.utilities import (
     CfStatistics,
     decompress_cf,
@@ -76,6 +77,16 @@ class TestCf2Statistics(unittest.TestCase):
     def test2_rank(self):
         """Test if rank is correct for the test2 format example"""
         self.assertTrue(self.test2_stats.package_names == self.expect_names)
+
+
+class TestCli(unittest.TestCase):
+    """
+    Test parsing of the contents file using test2 contents file format
+    """
+
+    def test_cli(self):
+        """Test cli"""
+        cli
 
 
 if __name__ == "__main__":
