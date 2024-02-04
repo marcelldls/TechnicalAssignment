@@ -114,4 +114,4 @@ def avail_architectures(debian_mirror: str) -> list[str]:
     filter = '<*href="binary-(.*)\/"'  # https://regex101.com/r/NqS4yK/1
     urllist = re.findall(filter, raw)
 
-    return urllist[1:]
+    return urllist
