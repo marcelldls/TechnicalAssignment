@@ -99,9 +99,14 @@ class CfStatistics:
 
     def print_top10(self):
         print("The top 10 packages with the highest file counts are:")
+        spacing = len(max(self.package_names[:10], key=len)) + 5
         for i in range(10):
             try:
-                print(f"{i+1}. {self.package_names[i]}  {self.file_count[i]}")
+                print(
+                    f"{i+1}."
+                    f"{self.package_names[i]: <{spacing}}"
+                    f"{self.file_count[i]}"
+                    )
             except IndexError:  # Handle less than 10 unique packages
                 print(f"{i+1}.")
 
