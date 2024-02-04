@@ -46,12 +46,18 @@ jobs:
           path: .
 
   coverage:
-    needs: test
     runs-on: ubuntu-latest
     steps:
-      - run: pip install coverage
-      - name: Fetch the coverage report
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          name: coverage-report
-      - run: coverage report --data-file=./.coverage --fail-under=100 --skip-empty
+          python-version: "3.10"
+      - name: Install package
+        run: pip install .[dev]
+      - name: Execute test runner
+        run: tox -e py
+      - name: Produce the coverage report
+        run: |
+          tox -e report
+          coverage report --data-file=./.coverage --fail-under=100 --skip-empty
