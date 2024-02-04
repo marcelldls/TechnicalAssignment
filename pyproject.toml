@@ -38,7 +38,7 @@ select = [
 legacy_tox_ini = """
     [tox]
     env_list =
-        py{38,39,310,311} 
+        py{39,310,311}
         lint
         type
 
