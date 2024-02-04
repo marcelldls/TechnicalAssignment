@@ -11,7 +11,7 @@ pip install git+https://github.com/262882/myTechnicalAssignment
 
 Running:
 ```
-package_statistics <architecture>
+package_statistics list <architecture>
 ```
 
 Returns:
@@ -24,7 +24,7 @@ Returns:
 
 Using alternative mirrors:
 ```
-package_statistics --debian_mirror http://ftp.am.debian.org/debian/dists/bullseye/main/ amd64
+package_statistics --debian_mirror http://ftp.am.debian.org/debian/dists/bullseye/main/ list amd64
 ```
 
 ## Development
