@@ -38,8 +38,6 @@ jobs:
         if: ${{ matrix.python==3.10 }}
         run: | 
           tox -e report
-          coverage report --skip-empty
-          coverage xml
       - name: Store the coverage report
         if: ${{ matrix.python==3.10 }}
         uses: actions/upload-artifact@v4
