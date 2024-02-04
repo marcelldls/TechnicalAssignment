@@ -42,12 +42,12 @@ legacy_tox_ini = """
         lint
         type
         py{39,310,311}
-        report
+        coverage
 
     [testenv]  # settings common to all environments
     allowlist_externals = coverage
     depends =
-        report: py310
+        coverage: py310
     commands =
         coverage run -m --source=package_statistics unittest discover tests/ "test_*.py"
 
@@ -61,10 +61,10 @@ legacy_tox_ini = """
     commands =
         mypy src tests
 
-    [testenv:report]
+    [testenv:coverage]
     allowlist_externals = coverage
     depends = py310
     commands =
-        coverage xml
+        coverage report --data-file=./.coverage --fail-under=100 --skip-empty
 
 """
