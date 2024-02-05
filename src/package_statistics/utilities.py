@@ -114,9 +114,10 @@ class CfStatistics:
 def avail_architectures(debian_mirror: str) -> list[str]:
 
     with urllib.request.urlopen(debian_mirror) as response:
-        raw = response.read().decode("utf-8")
+        raw = response.read()
+    decode = raw.decode("utf-8")
 
     filter = '<*href="binary-(.*)\/"'  # https://regex101.com/r/NqS4yK/1
-    urllist = re.findall(filter, raw)
+    urllist = re.findall(filter, decode)
 
     return urllist
