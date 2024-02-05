@@ -7,6 +7,8 @@ import unittest
 from unittest import mock
 from urllib.error import HTTPError
 
+from click.testing import CliRunner
+
 from package_statistics.main import cli
 from package_statistics.utilities import (
     CfStatistics,
@@ -19,15 +21,21 @@ from package_statistics.utilities import (
 class TestDownloadCF(unittest.TestCase):
     @mock.patch("urllib.request.urlretrieve")
     def test_OSError(self, mock):
-        mock.side_effect=OSError()
+        mock.side_effect = OSError()
         with self.assertRaises(Exception):
             download_cf("", "", "")
 
     @mock.patch("urllib.request.urlretrieve")
     def test_HTTPError(self, mock):
-        mock.side_effect=HTTPError(
-            "http://example.com", 500, "Internal Error", "", None  # type: ignore
-        ),
+        mock.side_effect = (
+            HTTPError(
+                "http://example.com",
+                500,
+                "Internal Error",
+                "",
+                None,  # type: ignore
+            ),
+        )
         with self.assertRaises(Exception):
             download_cf("", "", "")
 
@@ -101,6 +109,20 @@ class TestCf2Statistics(unittest.TestCase):
         self.assertTrue(self.test2_stats.package_names == self.expect_names)
 
 
+expected = [
+    "all",
+    "amd64",
+    "arm64",
+    "armel",
+    "armhf",
+    "i386",
+    "mips64el",
+    "mipsel",
+    "ppc64el",
+    "s390x",
+]
+
+
 @mock.patch("urllib.request.urlopen", new=lambda file: open(file, "rb"))
 class TestAvail(unittest.TestCase):
     """
@@ -113,19 +135,22 @@ class TestAvail(unittest.TestCase):
     def test_list(self):
         """Test if file count is correct for the test2 format example"""
         result = avail_architectures(self.data_path)
-        expected = [
-            "all",
-            "amd64",
-            "arm64",
-            "armel",
-            "armhf",
-            "i386",
-            "mips64el",
-            "mipsel",
-            "ppc64el",
-            "s390x",
-        ]
         self.assertTrue(result == expected)
+
+url =  "http://ftp.uk.debian.org/debian/dists/stable/main/"
+expected_archs = (
+    f"Available architectures at {url} are:\n"
+    "all\n"
+    "amd64\n"
+    "arm64\n"
+    "armel\n"
+    "armhf\n"
+    "i386\n"
+    "mips64el\n"
+    "mipsel\n"
+    "ppc64el\n"
+    "s390x\n"
+)
 
 
 class TestCli(unittest.TestCase):
@@ -136,6 +161,12 @@ class TestCli(unittest.TestCase):
     def test_cli(self):
         """Test cli"""
         cli
+
+    def test_hello_world(self):
+        runner = CliRunner()
+        result = runner.invoke(cli, ["avail"])
+        assert result.exit_code == 0
+        assert result.output == expected_archs
 
 
 if __name__ == "__main__":
