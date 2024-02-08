@@ -63,7 +63,3 @@ def avail(ctx):
     click.echo(f"Available architectures at {mirror} are:")
     for arch in arch_list:
         click.echo(arch)
-
-
-if __name__ == "__main__":
-    cli()

@@ -4,23 +4,50 @@
 
 import os
 import unittest
+from unittest import mock
+from urllib.error import HTTPError
 
-from package_statistics.main import cli
 from package_statistics.utilities import (
     CfStatistics,
+    avail_architectures,
     decompress_cf,
+    download_cf,
 )
+
+
+class TestDownloadCF(unittest.TestCase):
+    @mock.patch("urllib.request.urlretrieve")
+    def test_OSError(self, mock):
+        mock.side_effect = OSError()
+        with self.assertRaises(Exception):
+            download_cf("", "", "")
+
+    @mock.patch("urllib.request.urlretrieve")
+    def test_HTTPError(self, mock):
+        mock.side_effect = (
+            HTTPError(
+                "http://example.com",
+                500,
+                "Internal Error",
+                "",
+                None,  # type: ignore
+            ),
+        )
+        with self.assertRaises(Exception):
+            download_cf("", "", "")
+
 
 DATA_DIR = "tests/data/"
 
+
 class TestDecompressCf(unittest.TestCase):
     """
-    Test decompression of contents file
+    Test decompression of a contents file
     """
 
     test_architecture = "ziptest"
     decompressed_file = f"Contents-{test_architecture}"
-    result_path = DATA_DIR+decompressed_file
+    result_path = DATA_DIR + decompressed_file
 
     def setUp(self):  # Remove any preexisting contents file
         if os.path.exists(self.decompressed_file):
@@ -37,7 +64,7 @@ class TestDecompressCf(unittest.TestCase):
 
 
 # Manually counted
-expect_count = [x+1 for x in range(10)][::-1]
+expect_count = [x + 1 for x in range(10)][::-1]
 expect_names = ["package_" + str(x + 1) for x in range(10)][::-1]
 
 
@@ -79,15 +106,49 @@ class TestCf2Statistics(unittest.TestCase):
         self.assertTrue(self.test2_stats.package_names == self.expect_names)
 
 
-class TestCli(unittest.TestCase):
+expected = [
+    "all",
+    "amd64",
+    "arm64",
+    "armel",
+    "armhf",
+    "i386",
+    "mips64el",
+    "mipsel",
+    "ppc64el",
+    "s390x",
+]
+
+
+class TestAvail(unittest.TestCase):
     """
-    Test parsing of the contents file using test2 contents file format
+    Test retrieval of architectures
     """
 
-    def test_cli(self):
-        """Test cli"""
-        cli
+    def setUp(self):
+        self.data_path = DATA_DIR + "debian_mirror.html"
 
+    @mock.patch("urllib.request.urlopen", new=lambda file: open(file, "rb"))
+    def test_list(self):
+        result = avail_architectures(self.data_path)
+        self.assertTrue(result == expected)
 
-if __name__ == "__main__":
-    unittest.main()
+    @mock.patch("urllib.request.urlopen")
+    def test_list_network(self, mock):
+        mock.side_effect = OSError()
+        with self.assertRaises(Exception):
+            avail_architectures(self.data_path)
+
+    @mock.patch("urllib.request.urlopen")
+    def test_url(self, mock):
+        mock.side_effect = (
+            HTTPError(
+                "http://example.com",
+                500,
+                "Internal Error",
+                "",
+                None,  # type: ignore
+            ),
+        )
+        with self.assertRaises(Exception):
+            avail_architectures(self.data_path)

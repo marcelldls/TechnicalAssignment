@@ -100,23 +100,29 @@ class CfStatistics:
     def print_top10(self):
         print("The top 10 packages with the highest file counts are:")
         spacing = len(max(self.package_names[:10], key=len)) + 5
-        for i in range(10):
-            try:
-                print(
-                    f"{i+1}."
-                    f"{self.package_names[i]: <{spacing}}"
-                    f"{self.file_count[i]}"
-                    )
-            except IndexError:  # Handle less than 10 unique packages
-                print(f"{i+1}.")
+        for i in range(10):  # Assume atleast 10 packages 
+            print(
+                f"{i+1}."
+                f"{self.package_names[i]: <{spacing}}"
+                f"{self.file_count[i]}"
+                )
 
 
 def avail_architectures(debian_mirror: str) -> list[str]:
 
-    with urllib.request.urlopen(debian_mirror) as response:
-        raw = response.read().decode("utf-8")
+    try:
+        with urllib.request.urlopen(debian_mirror) as response:
+            raw = response.read()
+    except urllib.error.HTTPError as e:
+        raise Exception(
+            f"{e}. Is '{debian_mirror}' a suitable address?"
+        ) from e
+    except OSError as e:
+        raise Exception(f"{e}: Is your internet connection active?") from e
+
+    decode = raw.decode("utf-8")
 
     filter = '<*href="binary-(.*)\/"'  # https://regex101.com/r/NqS4yK/1
-    urllist = re.findall(filter, raw)
+    urllist = re.findall(filter, decode)
 
     return urllist

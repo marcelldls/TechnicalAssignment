@@ -65,6 +65,6 @@ legacy_tox_ini = """
     allowlist_externals = coverage
     depends = py310
     commands =
-        coverage report --data-file=./.coverage --fail-under=100 --skip-empty
+        coverage report --data-file=./.coverage --fail-under=100 --skip-empty -m
 
 """
