@@ -32,6 +32,8 @@ jobs:
           python-version: ${{ matrix.python }}
       - name: Install package
         run: pip install .[dev]
+      - name: Lock file
+        run: pip freeze
       - name: Execute test runner
         run: tox -e py
 
