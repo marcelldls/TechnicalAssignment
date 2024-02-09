@@ -12,7 +12,7 @@ requires-python = ">=3.8"
 
 [project.optional-dependencies]
 dev = [
-    "coverage===7.4.1",
+    "coverage==7.4.1",
     "mypy==1.8.0",
     "ruff==0.2.0",
     "tox==4.12.1",
