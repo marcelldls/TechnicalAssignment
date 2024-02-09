@@ -1,6 +1,6 @@
 # Technical assignment
 
-A python command line tool that takes architecture (amd64, arm64, etc.) as an argument and outputs the statistics of the top 10 packages (from Debian mirror: http://ftp.uk.debian.org/debian/dists/stable/main/) that have the most files associated with them.
+A python command line tool that takes architecture (amd64, arm64, etc.) as an argument and outputs the statistics of the top 10 packages from a Debian mirror that have the most files associated with them.
 
 ## Example of usage:
 
